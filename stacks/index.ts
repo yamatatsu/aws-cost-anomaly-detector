@@ -22,6 +22,7 @@ export class BillingMonitor extends cdk.Stack {
         }),
       ],
       runtime: lambda.Runtime.NODEJS_10_X,
+      timeout: cdk.Duration.seconds(10),
       environment: { SLACK_API_TOKEN, POST_CHANNEL },
     });
 

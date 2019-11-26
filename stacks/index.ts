@@ -36,7 +36,7 @@ export class BillingMonitor extends cdk.Stack {
 
     new events.Rule(this, "BillingMonitorCron", {
       ruleName: "BillingMonitorCron",
-      schedule: events.Schedule.cron({ minute: "0", hour: "0" }),
+      schedule: events.Schedule.cron({ minute: "00", hour: "13" }),
       targets: [new targets.LambdaFunction(handler)],
     });
   }

@@ -4,13 +4,13 @@ import { ChatPostMessageArguments } from "@slack/web-api";
 
 const PERIOD = 24 * 60 * 60; // 1 day
 
-type MetricStatistic = {
-  Datapoints?: { Maximum?: number }[];
-};
+type MetricStatistic = { Datapoints?: { Maximum?: number }[] };
+type Dimension = { Name: string; Value: string };
+type Metric = { Dimensions?: Dimension[] };
 
 export const getMetricStatisticsParams = (
   now: Date,
-  metrics: CloudWatch.Metrics,
+  metrics: Metric[],
 ): CloudWatch.GetMetricStatisticsInput[] => {
   const dimensionsList = metrics
     .map(metric => metric.Dimensions && metric.Dimensions[0])
@@ -28,7 +28,7 @@ export const getMetricStatisticsParams = (
       MetricName: "EstimatedCharges",
       Namespace: "AWS/Billing",
       Period: PERIOD,
-      StartTime: subDays(now, -1),
+      StartTime: subDays(now, 1),
       EndTime: now,
       Statistics: ["Maximum"],
       Dimensions: dimensions,

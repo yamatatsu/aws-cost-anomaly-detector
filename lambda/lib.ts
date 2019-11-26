@@ -4,7 +4,7 @@ import { ChatPostMessageArguments } from "@slack/web-api";
 
 const PERIOD = 24 * 60 * 60; // 1 day
 
-type MetricStatistic = { Datapoints?: { Maximum?: number }[] };
+type MetricStatistic = { Label?: string; Datapoints?: { Maximum?: number }[] };
 type Dimension = { Name: string; Value: string };
 type Metric = { Dimensions?: Dimension[] };
 
@@ -13,7 +13,7 @@ export const getMetricStatisticsParams = (
   metrics: Metric[],
 ): CloudWatch.GetMetricStatisticsInput[] => {
   const dimensionsList = metrics
-    .map(metric => metric.Dimensions && metric.Dimensions[0])
+    .map(metric => metric.Dimensions?.[0])
     .filter(isNotNull)
     .filter(dimension => dimension.Name == "ServiceName")
     .map(dimension => dimension.Value)
@@ -37,11 +37,9 @@ export const getMetricStatisticsParams = (
 };
 
 export const getMaximum = (ms: MetricStatistic | undefined) =>
-  ms?.Datapoints?.[0].Maximum ?? 0;
+  ms?.Datapoints?.[0]?.Maximum ?? 0;
 
-export const getFields = (
-  metricStatistics: CloudWatch.GetMetricStatisticsOutput[],
-) =>
+export const getFields = (metricStatistics: MetricStatistic[]) =>
   metricStatistics
     .filter(result => result.Label)
     .sort((result1, result2) => getMaximum(result2) - getMaximum(result1))

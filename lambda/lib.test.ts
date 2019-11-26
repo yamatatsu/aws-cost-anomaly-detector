@@ -1,25 +1,11 @@
-import { getMetricStatisticsParams, getMaximum, getFields } from "./lib";
+import { getServiceNames, getAmount } from "./lib";
 
-test("getMetricStatisticsParams fiter for not 'ServiceName'", () => {
-  const now = new Date("2019-11-26");
-  const yesterdday = new Date("2019-11-25");
+test("getServiceNames fiter for not 'ServiceName'", () => {
   const metrics = [{ Dimensions: [{ Name: "Foo", Value: "Bar" }] }];
-  expect(getMetricStatisticsParams(now, metrics)).toEqual([
-    {
-      MetricName: "EstimatedCharges",
-      Namespace: "AWS/Billing",
-      Period: 86400,
-      StartTime: yesterdday,
-      EndTime: now,
-      Statistics: ["Maximum"],
-      Dimensions: [{ Name: "Currency", Value: "USD" }],
-    },
-  ]);
+  expect(getServiceNames(metrics)).toEqual([]);
 });
 
-test("getMetricStatisticsParams maximum case", () => {
-  const now = new Date("2019-11-26");
-  const yesterdday = new Date("2019-11-25");
+test("getServiceNames maximum case", () => {
   const metrics = [
     {
       Dimensions: [
@@ -32,69 +18,22 @@ test("getMetricStatisticsParams maximum case", () => {
     { Dimensions: [] },
     {},
   ];
-  expect(getMetricStatisticsParams(now, metrics)).toEqual([
-    {
-      MetricName: "EstimatedCharges",
-      Namespace: "AWS/Billing",
-      Period: 86400,
-      StartTime: yesterdday,
-      EndTime: now,
-      Statistics: ["Maximum"],
-      Dimensions: [{ Name: "Currency", Value: "USD" }],
-    },
-    {
-      MetricName: "EstimatedCharges",
-      Namespace: "AWS/Billing",
-      Period: 86400,
-      StartTime: yesterdday,
-      EndTime: now,
-      Statistics: ["Maximum"],
-      Dimensions: [
-        { Name: "Currency", Value: "USD" },
-        { Name: "ServiceName", Value: "Foo" },
-      ],
-    },
-    {
-      MetricName: "EstimatedCharges",
-      Namespace: "AWS/Billing",
-      Period: 86400,
-      StartTime: yesterdday,
-      EndTime: now,
-      Statistics: ["Maximum"],
-      Dimensions: [
-        { Name: "Currency", Value: "USD" },
-        { Name: "ServiceName", Value: "Bar" },
-      ],
-    },
-  ]);
+  expect(getServiceNames(metrics)).toEqual(["Foo", "Bar"]);
 });
 
-test("getMaximum get 'Maximum'", () => {
+test("getAmount get 'Maximum'", () => {
   const ms = { Datapoints: [{ Maximum: 999 }] };
-  expect(getMaximum(ms)).toEqual(999);
+  expect(getAmount(ms)).toEqual(999);
 });
-test("getMaximum if no 'Maximum'", () => {
+test("getAmount if no 'Maximum'", () => {
   const ms = { Datapoints: [{}] };
-  expect(getMaximum(ms)).toEqual(0);
+  expect(getAmount(ms)).toEqual(0);
 });
-test("getMaximum if no datapoint", () => {
+test("getAmount if no datapoint", () => {
   const ms = { Datapoints: [] };
-  expect(getMaximum(ms)).toEqual(0);
+  expect(getAmount(ms)).toEqual(0);
 });
-test("getMaximum if no 'Datapoints'", () => {
+test("getAmount if no 'Datapoints'", () => {
   const ms = {};
-  expect(getMaximum(ms)).toEqual(0);
-});
-
-test("getFields", () => {
-  const metricStatistics = [
-    { Label: "test_Label", Datapoints: [{ Maximum: 999 }] },
-  ];
-  expect(getFields(metricStatistics)).toEqual([
-    {
-      title: "test_Label",
-      value: "$999",
-      short: true,
-    },
-  ]);
+  expect(getAmount(ms)).toEqual(0);
 });

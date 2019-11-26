@@ -8,50 +8,29 @@ type MetricStatistic = { Label?: string; Datapoints?: { Maximum?: number }[] };
 type Dimension = { Name: string; Value: string };
 type Metric = { Dimensions?: Dimension[] };
 
-export const getMetricStatisticsParams = (
-  now: Date,
-  metrics: Metric[],
-): CloudWatch.GetMetricStatisticsInput[] => {
-  const dimensionsList = metrics
+export const getServiceNames = (metrics: Metric[]): string[] => {
+  return metrics
     .map(metric => metric.Dimensions?.[0])
     .filter(isNotNull)
     .filter(dimension => dimension.Name == "ServiceName")
     .map(dimension => dimension.Value)
-    .filter((serviceName, index, self) => self.indexOf(serviceName) === index)
-    .map(serviceName => [
-      { Name: "Currency", Value: "USD" },
-      { Name: "ServiceName", Value: serviceName },
-    ]);
-
-  return [[{ Name: "Currency", Value: "USD" }], ...dimensionsList].map(
-    dimensions => ({
-      MetricName: "EstimatedCharges",
-      Namespace: "AWS/Billing",
-      Period: PERIOD,
-      StartTime: subDays(now, 1),
-      EndTime: now,
-      Statistics: ["Maximum"],
-      Dimensions: dimensions,
-    }),
-  );
+    .filter((serviceName, index, self) => self.indexOf(serviceName) === index);
 };
 
-export const getMaximum = (ms: MetricStatistic | undefined) =>
-  ms?.Datapoints?.[0]?.Maximum ?? 0;
+export const getParam = (now: Date) => (
+  dimensions: Dimension[],
+): CloudWatch.GetMetricStatisticsInput => ({
+  MetricName: "EstimatedCharges",
+  Namespace: "AWS/Billing",
+  Period: PERIOD,
+  StartTime: subDays(now, 1),
+  EndTime: now,
+  Statistics: ["Maximum"],
+  Dimensions: dimensions,
+});
 
-export const getFields = (metricStatistics: MetricStatistic[]) =>
-  [...metricStatistics]
-    .sort((result1, result2) => getMaximum(result2) - getMaximum(result1))
-    .map(result => {
-      const maximum = getMaximum(result);
-      if (!result.Label) return null;
-      return {
-        title: result.Label,
-        value: `$${maximum}`,
-        short: true,
-      };
-    })
-    .filter(isNotNull);
+export const getAmount = (ms: MetricStatistic | undefined) =>
+  ms?.Datapoints?.[0]?.Maximum ?? 0;
 
 export function callingArguments(
   channel: string,

@@ -41,11 +41,10 @@ export const getMaximum = (ms: MetricStatistic | undefined) =>
 
 export const getFields = (metricStatistics: MetricStatistic[]) =>
   metricStatistics
-    .filter(result => result.Label)
     .sort((result1, result2) => getMaximum(result2) - getMaximum(result1))
     .map(result => {
       const maximum = getMaximum(result);
-      if (!maximum || !result.Label) return null;
+      if (!result.Label) return null;
       return {
         title: result.Label,
         value: `$${maximum}`,
@@ -65,13 +64,13 @@ export function callingArguments(
 ): ChatPostMessageArguments {
   return {
     channel,
-    text: "FooBaa",
+    text: "FooBar",
     blocks: [
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "*Hello* hello: " + maximumDatapoint,
+          text: "*AWS Billing Monitor*\ntotal: $" + maximumDatapoint,
         },
       },
     ],

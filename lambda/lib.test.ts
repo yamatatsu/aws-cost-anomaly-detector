@@ -1,6 +1,6 @@
 import { getMetricStatisticsParams } from "./lib";
 
-test("getMetricStatisticsParams", async () => {
+test("getMetricStatisticsParams fiter for not 'ServiceName'", async () => {
   const now = new Date("2019-11-26");
   const yesterdday = new Date("2019-11-25");
   const metrics = [{ Dimensions: [{ Name: "Foo", Value: "Bar" }] }];
@@ -16,16 +16,21 @@ test("getMetricStatisticsParams", async () => {
     },
   ]);
 });
-test("getMetricStatisticsParams", async () => {
+
+test("getMetricStatisticsParams maximum case", async () => {
   const now = new Date("2019-11-26");
   const yesterdday = new Date("2019-11-25");
   const metrics = [
     {
       Dimensions: [
-        { Name: "ServiceName", Value: "FooBar" },
-        { Name: "ServiceName", Value: "FooBar" },
+        { Name: "ServiceName", Value: "Foo" },
+        { Name: "ServiceName", Value: "Foo" },
       ],
     },
+    { Dimensions: [{ Name: "ServiceName", Value: "Foo" }] },
+    { Dimensions: [{ Name: "ServiceName", Value: "Bar" }] },
+    { Dimensions: [] },
+    {},
   ];
   expect(getMetricStatisticsParams(now, metrics)).toEqual([
     {
@@ -46,7 +51,19 @@ test("getMetricStatisticsParams", async () => {
       Statistics: ["Maximum"],
       Dimensions: [
         { Name: "Currency", Value: "USD" },
-        { Name: "ServiceName", Value: "FooBar" },
+        { Name: "ServiceName", Value: "Foo" },
+      ],
+    },
+    {
+      MetricName: "EstimatedCharges",
+      Namespace: "AWS/Billing",
+      Period: 86400,
+      StartTime: yesterdday,
+      EndTime: now,
+      Statistics: ["Maximum"],
+      Dimensions: [
+        { Name: "Currency", Value: "USD" },
+        { Name: "ServiceName", Value: "Bar" },
       ],
     },
   ]);

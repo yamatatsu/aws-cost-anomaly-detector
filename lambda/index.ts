@@ -14,7 +14,7 @@ const messenger = (token: string | undefined) => {
   return (args: ChatPostMessageArguments) => slack.chat.postMessage(args);
 };
 
-const cloudwatch = new CloudWatch();
+const cloudwatch = new CloudWatch({ region: "us-east-1" });
 const listMetrics = () =>
   cloudwatch.listMetrics({ MetricName: "EstimatedCharges" }).promise();
 const getMaximumMetricStatistics = (

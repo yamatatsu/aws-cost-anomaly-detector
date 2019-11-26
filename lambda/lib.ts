@@ -40,7 +40,7 @@ export const getMaximum = (ms: MetricStatistic | undefined) =>
   ms?.Datapoints?.[0]?.Maximum ?? 0;
 
 export const getFields = (metricStatistics: MetricStatistic[]) =>
-  metricStatistics
+  [...metricStatistics]
     .sort((result1, result2) => getMaximum(result2) - getMaximum(result1))
     .map(result => {
       const maximum = getMaximum(result);

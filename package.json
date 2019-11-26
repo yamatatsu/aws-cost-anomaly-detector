@@ -1,0 +1,33 @@
+{
+  "name": "aws-billing-monitor-cdk",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.lambda.json",
+    "cp-moddules": "mkdir -p layer-dist/nodejs && cp -r node_modules layer-dist/nodejs",
+    "cdk": "dotenv cdk",
+    "synth": "dotenv cdk synth",
+    "predeploy": "yarn build && yarn cp-moddules",
+    "deploy": "dotenv cdk deploy"
+  },
+  "dependencies": {
+    "@slack/web-api": "^5.4.0",
+    "aws-sdk": "^2.563.0",
+    "date-fns": "^2.8.1"
+  },
+  "devDependencies": {
+    "@aws-cdk/aws-events": "^1.18.0",
+    "@aws-cdk/aws-events-targets": "^1.18.0",
+    "@aws-cdk/aws-iam": "^1.18.0",
+    "@aws-cdk/aws-lambda": "^1.18.0",
+    "@aws-cdk/core": "^1.18.0",
+    "@types/aws-lambda": "^8.10.34",
+    "@types/node": "^12.12.7",
+    "aws-cdk": "^1.18.0",
+    "dotenv-cli": "^3.1.0",
+    "prettier": "^1.19.1",
+    "ts-node": "^8.5.0",
+    "typescript": "^3.7.2"
+  }
+}

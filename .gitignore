@@ -1,0 +1,8 @@
+node_modules
+.cdk.staging
+cdk.out
+yarn-error.log
+result.json
+dist
+.env
+layer-dist

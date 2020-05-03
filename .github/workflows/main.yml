@@ -23,3 +23,6 @@ jobs:
       - run: yarn -v
       - run: yarn
       - run: yarn test
+        env:
+          SLACK_API_TOKEN: test
+          POST_CHANNEL: test

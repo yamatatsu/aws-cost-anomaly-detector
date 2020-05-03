@@ -1,0 +1,238 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Waf snapshot 1`] = `
+Object {
+  "Parameters": Object {
+    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caArtifactHashC3057440": Object {
+      "Description": "Artifact hash for asset \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
+      "Type": "String",
+    },
+    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3Bucket7EC253FF": Object {
+      "Description": "S3 bucket for asset \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
+      "Type": "String",
+    },
+    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54": Object {
+      "Description": "S3 key for asset version \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
+      "Type": "String",
+    },
+    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034ArtifactHashA216920F": Object {
+      "Description": "Artifact hash for asset \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
+      "Type": "String",
+    },
+    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3BucketE43D9454": Object {
+      "Description": "S3 bucket for asset \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
+      "Type": "String",
+    },
+    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9": Object {
+      "Description": "S3 key for asset version \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "BillingMonitorCronB145D2A8": Object {
+      "Properties": Object {
+        "Name": "BillingMonitorCron",
+        "ScheduleExpression": "cron(00 13 * * ? *)",
+        "State": "ENABLED",
+        "Targets": Array [
+          Object {
+            "Arn": Object {
+              "Fn::GetAtt": Array [
+                "BillingMonitorFunction3B4D76BE",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "BillingMonitorFunction3B4D76BE": Object {
+      "DependsOn": Array [
+        "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC",
+        "BillingMonitorFunctionServiceRoleC4E47CFC",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3Bucket7EC253FF",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "POST_CHANNEL": "CQ7URCBD5",
+            "SLACK_API_TOKEN": "xoxp-19881142769-19881142785-810585468307-b4c12ee843aa511831ef58388a416113",
+          },
+        },
+        "FunctionName": "BillingMonitor",
+        "Handler": "index.handler",
+        "Layers": Array [
+          Object {
+            "Ref": "modulesBB7D6B85",
+          },
+        ],
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "BillingMonitorFunctionServiceRoleC4E47CFC",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs10.x",
+        "Timeout": 10,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "BillingMonitorFunctionAllowEventRuleBillingMonitorBillingMonitorCronDA99E21C1FE8A5F4": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "BillingMonitorFunction3B4D76BE",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::GetAtt": Array [
+            "BillingMonitorCronB145D2A8",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "BillingMonitorFunctionServiceRoleC4E47CFC": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "cloudwatch:ListMetrics",
+                "cloudwatch:GetMetricStatistics",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC",
+        "Roles": Array [
+          Object {
+            "Ref": "BillingMonitorFunctionServiceRoleC4E47CFC",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "modulesBB7D6B85": Object {
+      "Properties": Object {
+        "Content": Object {
+          "S3Bucket": Object {
+            "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3BucketE43D9454",
+          },
+          "S3Key": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                Object {
+                  "Fn::Select": Array [
+                    0,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                Object {
+                  "Fn::Select": Array [
+                    1,
+                    Object {
+                      "Fn::Split": Array [
+                        "||",
+                        Object {
+                          "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+  },
+}
+`;

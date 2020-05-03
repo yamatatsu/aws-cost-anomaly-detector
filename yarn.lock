@@ -2,6 +2,17 @@
 # yarn lockfile v1
 
 
+"@aws-cdk/assert@1.18.0":
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/assert/-/assert-1.18.0.tgz#cfbfab5ea4a794b555c9e13ed5f69d24dda79dbb"
+  integrity sha512-kgg+ei+qUeIEU7aEeMDg1YQGowljmwFbodkArAoQYaueDSvZMvjUDW19P73H4aZ6216mKzqPpyyNqJeRcs3nrw==
+  dependencies:
+    "@aws-cdk/cloudformation-diff" "1.18.0"
+    "@aws-cdk/core" "1.18.0"
+    "@aws-cdk/cx-api" "1.18.0"
+    jest "^24.9.0"
+    source-map-support "^0.5.16"
+
 "@aws-cdk/assets@1.18.0":
   version "1.18.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/assets/-/assets-1.18.0.tgz#c6859dc82c43864dd9a52f3cac32dd4e66023936"

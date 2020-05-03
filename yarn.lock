@@ -110,6 +110,13 @@
     "@aws-cdk/core" "1.36.1"
     constructs "^3.0.2"
 
+"@aws-cdk/aws-chatbot@^1.36.1":
+  version "1.36.1"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-chatbot/-/aws-chatbot-1.36.1.tgz#83ea48235faee1d2bcdd781806fffc763d453be3"
+  integrity sha512-r0QaGCYaeAItMftdTRf5XgNI6Y40UPq9Vz+m5O+aoF54PkAO5AKuuGVnE4hw5oy/fhbpkBmZM3+ZkcBjQQRiLg==
+  dependencies:
+    "@aws-cdk/core" "1.36.1"
+
 "@aws-cdk/aws-cloudformation@1.36.1":
   version "1.36.1"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-cloudformation/-/aws-cloudformation-1.36.1.tgz#0cf8b0d3060431b2472a1a6c2a083b6ecb1692ae"

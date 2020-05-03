@@ -22,6 +22,7 @@ jobs:
       - run: node -v
       - run: yarn -v
       - run: yarn
+      - run: yarn build
       - run: yarn test
         env:
           SLACK_API_TOKEN: test

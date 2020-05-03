@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "dotenv jest",
+    "test": "dotenv -e .env.test jest",
     "build": "tsc -p ./tsconfig.lambda.json",
     "cp-moddules": "mkdir -p layer-dist/nodejs && cp -r node_modules layer-dist/nodejs",
     "cdk": "dotenv cdk",
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.36.1",
+    "@aws-cdk/aws-chatbot": "^1.36.1",
     "@aws-cdk/aws-events": "^1.36.1",
     "@aws-cdk/aws-events-targets": "^1.36.1",
     "@aws-cdk/aws-iam": "^1.36.1",

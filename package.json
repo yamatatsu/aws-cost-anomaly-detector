@@ -21,6 +21,7 @@
     "@aws-cdk/assert": "1.36.1",
     "@aws-cdk/aws-budgets": "^1.36.1",
     "@aws-cdk/aws-chatbot": "^1.36.1",
+    "@aws-cdk/aws-cloudwatch-actions": "^1.36.1",
     "@aws-cdk/aws-events": "^1.36.1",
     "@aws-cdk/aws-events-targets": "^1.36.1",
     "@aws-cdk/aws-iam": "^1.36.1",

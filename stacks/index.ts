@@ -1,12 +1,10 @@
 import * as cdk from "@aws-cdk/core";
-import * as lambda from "@aws-cdk/aws-lambda";
-import * as events from "@aws-cdk/aws-events";
-import * as targets from "@aws-cdk/aws-events-targets";
 import * as iam from "@aws-cdk/aws-iam";
 import * as chatbot from "@aws-cdk/aws-chatbot";
 import * as sns from "@aws-cdk/aws-sns";
-import * as lambdaDestinations from "@aws-cdk/aws-lambda-destinations";
 import * as budgets from "@aws-cdk/aws-budgets";
+import * as cloudwatch from "@aws-cdk/aws-cloudwatch";
+import * as cloudwatchActions from "@aws-cdk/aws-cloudwatch-actions";
 
 export class BillingMonitor extends cdk.Stack {
   constructor(parent: cdk.App, id: string, props?: cdk.StackProps) {
@@ -36,6 +34,7 @@ export class BillingMonitor extends cdk.Stack {
     });
 
     const topic = new sns.Topic(this, "topic");
+    const snsAction = new cloudwatchActions.SnsAction(topic);
 
     /**
      * It is requires to some setup to be done in the AWS Chatbot console.
@@ -52,8 +51,6 @@ export class BillingMonitor extends cdk.Stack {
       snsTopicArns: [topic.topicArn],
     });
 
-    const subscribers = [{ address: topic.topicArn, subscriptionType: "SNS" }];
-    const notification = { notificationType: "ACTUAL", threshold: 0.1 };
     new budgets.CfnBudget(this, "budget", {
       budget: {
         budgetLimit: { amount: 1, unit: "USD" },
@@ -61,19 +58,17 @@ export class BillingMonitor extends cdk.Stack {
         timeUnit: "MONTHLY",
       },
       notificationsWithSubscribers: [
-        {
-          notification: { comparisonOperator: "EQUAL_TO", ...notification },
-          subscribers,
+        "EQUAL_TO",
+        "GREATER_THAN",
+        "LESS_THAN",
+      ].map((comparisonOperator) => ({
+        notification: {
+          comparisonOperator,
+          notificationType: "ACTUAL",
+          threshold: 0.1,
         },
-        {
-          notification: { comparisonOperator: "GREATER_THAN", ...notification },
-          subscribers,
-        },
-        {
-          notification: { comparisonOperator: "LESS_THAN", ...notification },
-          subscribers,
-        },
-      ],
+        subscribers: [{ address: topic.topicArn, subscriptionType: "SNS" }],
+      })),
     });
     topic.addToResourcePolicy(
       new iam.PolicyStatement({
@@ -85,42 +80,89 @@ export class BillingMonitor extends cdk.Stack {
       }),
     );
 
+    [
+      { Currency: "USD", ServiceName: "AmazonEC2" },
+      { Currency: "USD", ServiceName: "AWSMarketplace" },
+      { Currency: "USD", ServiceName: "AmazonCloudWatch" },
+      { Currency: "USD", ServiceName: "AmazonSNS" },
+      { Currency: "USD", ServiceName: "AWSDataTransfer" },
+      { Currency: "USD", ServiceName: "awskms" },
+      { Currency: "USD", ServiceName: "AmazonS3" },
+      { Currency: "USD", ServiceName: "AWSLambda" },
+      { Currency: "USD", ServiceName: "AWSXRay" },
+      { Currency: "USD", ServiceName: "AmazonApiGateway" },
+      { Currency: "USD", ServiceName: "AWSBudgets" },
+    ]
+      .map(
+        (dimensions) =>
+          new cloudwatch.Metric({
+            namespace: "AWS/Billing",
+            metricName: "EstimatedCharges",
+            dimensions,
+            region: "us-east-1",
+          }),
+      )
+      .map((metric) => {
+        const serviceName = metric.dimensions?.ServiceName;
+        if (!serviceName) throw `ないこたないやろ. ${JSON.stringify(metric)}`;
+        return new cloudwatch.Alarm(this, `alarm-${serviceName}`, {
+          metric,
+          period: cdk.Duration.days(1),
+          statistic: "max",
+          alarmName: serviceName,
+          comparisonOperator:
+            cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+          threshold: 0,
+          evaluationPeriods: 1,
+          datapointsToAlarm: 1,
+          // alarmDescription?: string,
+          // evaluateLowSampleCountPercentile?: string,
+          // treatMissingData?: TreatMissingData,
+          // actionsEnabled?: boolean,
+        });
+      })
+      .forEach((alarm) => alarm.addAlarmAction(snsAction));
+
     // ========================================
     // TODO: 以下、lambdaからchatbotを起動しようとして儚くも力尽きた残骸たち。
     // いつか自由にchatbotを発火できるようになるって信じてる。
-    const handler = new lambda.Function(this, "BillingMonitorFunction", {
-      handler: "index.handler",
-      functionName: "BillingMonitor",
-      code: new lambda.AssetCode("./dist"),
-      layers: [
-        new lambda.LayerVersion(this, "modules", {
-          code: new lambda.AssetCode("./layer-dist"),
-        }),
-      ],
-      runtime: lambda.Runtime.NODEJS_10_X,
-      timeout: cdk.Duration.seconds(10),
-    });
+    // import * as lambda from "@aws-cdk/aws-lambda";
+    // import * as events from "@aws-cdk/aws-events";
+    // import * as targets from "@aws-cdk/aws-events-targets";
+    // import * as lambdaDestinations from "@aws-cdk/aws-lambda-destinations";
+    // const handler = new lambda.Function(this, "BillingMonitorFunction", {
+    //   handler: "index.handler",
+    //   functionName: "BillingMonitor",
+    //   code: new lambda.AssetCode("./dist"),
+    //   layers: [
+    //     new lambda.LayerVersion(this, "modules", {
+    //       code: new lambda.AssetCode("./layer-dist"),
+    //     }),
+    //   ],
+    //   runtime: lambda.Runtime.NODEJS_10_X,
+    //   timeout: cdk.Duration.seconds(10),
+    // });
 
-    const snsDestination = new lambdaDestinations.SnsDestination(topic);
-    new lambda.EventInvokeConfig(this, "EventInvokeConfig", {
-      function: handler,
-      onSuccess: snsDestination,
-      onFailure: snsDestination,
-    });
+    // const snsDestination = new lambdaDestinations.SnsDestination(topic);
+    // new lambda.EventInvokeConfig(this, "EventInvokeConfig", {
+    //   function: handler,
+    //   onSuccess: snsDestination,
+    //   onFailure: snsDestination,
+    // });
 
-    handler.addToRolePolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ["cloudwatch:ListMetrics", "cloudwatch:GetMetricStatistics"],
-        resources: ["*"],
-      }),
-    );
+    // handler.addToRolePolicy(
+    //   new iam.PolicyStatement({
+    //     effect: iam.Effect.ALLOW,
+    //     actions: ["cloudwatch:ListMetrics", "cloudwatch:GetMetricStatistics"],
+    //     resources: ["*"],
+    //   }),
+    // );
 
-    new events.Rule(this, "BillingMonitorCron", {
-      ruleName: "BillingMonitorCron",
-      schedule: events.Schedule.cron({ hour: "13", minute: "00" }),
-      targets: [new targets.LambdaFunction(handler)],
-    });
+    // new events.Rule(this, "BillingMonitorCron", {
+    //   ruleName: "BillingMonitorCron",
+    //   schedule: events.Schedule.cron({ hour: "13", minute: "00" }),
+    //   targets: [new targets.LambdaFunction(handler)],
+    // });
   }
 }
 

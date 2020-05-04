@@ -2,140 +2,406 @@
 
 exports[`BillingMonitor snapshot 1`] = `
 Object {
-  "Parameters": Object {
-    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caArtifactHashC3057440": Object {
-      "Description": "Artifact hash for asset \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
-      "Type": "String",
-    },
-    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3Bucket7EC253FF": Object {
-      "Description": "S3 bucket for asset \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
-      "Type": "String",
-    },
-    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54": Object {
-      "Description": "S3 key for asset version \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
-      "Type": "String",
-    },
-    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034ArtifactHashA216920F": Object {
-      "Description": "Artifact hash for asset \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
-      "Type": "String",
-    },
-    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3BucketE43D9454": Object {
-      "Description": "S3 bucket for asset \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
-      "Type": "String",
-    },
-    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9": Object {
-      "Description": "S3 key for asset version \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
-      "Type": "String",
-    },
-  },
   "Resources": Object {
-    "BillingMonitorCronB145D2A8": Object {
+    "alarmAWSBudgetsAC68598A": Object {
       "Properties": Object {
-        "Name": "BillingMonitorCron",
-        "ScheduleExpression": "cron(00 13 * * ? *)",
-        "State": "ENABLED",
-        "Targets": Array [
+        "AlarmActions": Array [
           Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
-                "BillingMonitorFunction3B4D76BE",
-                "Arn",
-              ],
-            },
-            "Id": "Target0",
+            "Ref": "topic69831491",
           },
         ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
-    "BillingMonitorFunction3B4D76BE": Object {
-      "DependsOn": Array [
-        "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC",
-        "BillingMonitorFunctionServiceRoleC4E47CFC",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3Bucket7EC253FF",
+        "AlarmName": "AWSBudgets",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
           },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54",
-                        },
-                      ],
-                    },
-                  ],
+          Object {
+            "Name": "ServiceName",
+            "Value": "AWSBudgets",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAWSDataTransfer8E199EEA": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AWSDataTransfer",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AWSDataTransfer",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAWSLambda323CB318": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AWSLambda",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AWSLambda",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAWSMarketplace6FA76CDB": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AWSMarketplace",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AWSMarketplace",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAWSXRay23F6031B": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AWSXRay",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AWSXRay",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAmazonApiGateway2FD88E20": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AmazonApiGateway",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AmazonApiGateway",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAmazonCloudWatch8A7687AD": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AmazonCloudWatch",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AmazonCloudWatch",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAmazonEC2B103A89A": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AmazonEC2",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AmazonEC2",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAmazonS355F4D449": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AmazonS3",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AmazonS3",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmAmazonSNS490899C2": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "AmazonSNS",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "AmazonSNS",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "alarmawskms3CC9D3F7": Object {
+      "Properties": Object {
+        "AlarmActions": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+        "AlarmName": "awskms",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 1,
+        "Dimensions": Array [
+          Object {
+            "Name": "Currency",
+            "Value": "USD",
+          },
+          Object {
+            "Name": "ServiceName",
+            "Value": "awskms",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "EstimatedCharges",
+        "Namespace": "AWS/Billing",
+        "Period": 86400,
+        "Statistic": "Maximum",
+        "Threshold": 0,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "budget": Object {
+      "Properties": Object {
+        "Budget": Object {
+          "BudgetLimit": Object {
+            "Amount": 1,
+            "Unit": "USD",
+          },
+          "BudgetType": "COST",
+          "TimeUnit": "MONTHLY",
+        },
+        "NotificationsWithSubscribers": Array [
+          Object {
+            "Notification": Object {
+              "ComparisonOperator": "EQUAL_TO",
+              "NotificationType": "ACTUAL",
+              "Threshold": 0.1,
+            },
+            "Subscribers": Array [
+              Object {
+                "Address": Object {
+                  "Ref": "topic69831491",
                 },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
+                "SubscriptionType": "SNS",
+              },
             ],
           },
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "POST_CHANNEL": "test",
-            "SLACK_API_TOKEN": "test",
-          },
-        },
-        "FunctionName": "BillingMonitor",
-        "Handler": "index.handler",
-        "Layers": Array [
           Object {
-            "Ref": "modulesBB7D6B85",
+            "Notification": Object {
+              "ComparisonOperator": "GREATER_THAN",
+              "NotificationType": "ACTUAL",
+              "Threshold": 0.1,
+            },
+            "Subscribers": Array [
+              Object {
+                "Address": Object {
+                  "Ref": "topic69831491",
+                },
+                "SubscriptionType": "SNS",
+              },
+            ],
+          },
+          Object {
+            "Notification": Object {
+              "ComparisonOperator": "LESS_THAN",
+              "NotificationType": "ACTUAL",
+              "Threshold": 0.1,
+            },
+            "Subscribers": Array [
+              Object {
+                "Address": Object {
+                  "Ref": "topic69831491",
+                },
+                "SubscriptionType": "SNS",
+              },
+            ],
           },
         ],
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "BillingMonitorFunctionServiceRoleC4E47CFC",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs10.x",
-        "Timeout": 10,
       },
-      "Type": "AWS::Lambda::Function",
+      "Type": "AWS::Budgets::Budget",
     },
-    "BillingMonitorFunctionAllowEventRuleBillingMonitorBillingMonitorCronDA99E21C1FE8A5F4": Object {
+    "chatbot": Object {
       "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
+        "ConfigurationName": "BillingMonitor",
+        "IamRoleArn": Object {
           "Fn::GetAtt": Array [
-            "BillingMonitorFunction3B4D76BE",
+            "chatbotRoleC6D2FF92",
             "Arn",
           ],
         },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
-            "BillingMonitorCronB145D2A8",
-            "Arn",
-          ],
-        },
+        "SlackChannelId": "test_SLACK_CHANNEL_ID",
+        "SlackWorkspaceId": "test_SLACK_WORKSPACE_ID",
+        "SnsTopicArns": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::Chatbot::SlackChannelConfiguration",
     },
-    "BillingMonitorFunctionServiceRoleC4E47CFC": Object {
+    "chatbotRoleC6D2FF92": Object {
       "Properties": Object {
         "AssumeRolePolicyDocument": Object {
           "Statement": Array [
@@ -143,332 +409,62 @@ Object {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": Object {
-                "Service": "lambda.amazonaws.com",
+                "Service": "chatbot.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
+        "Policies": Array [
           Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
+            "PolicyDocument": Object {
+              "Statement": Array [
                 Object {
-                  "Ref": "AWS::Partition",
+                  "Action": Array [
+                    "cloudwatch:Describe*",
+                    "cloudwatch:Get*",
+                    "cloudwatch:List*",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
                 },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
               ],
-            ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "ChatbotNotificationsOnlyPolicy",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC": Object {
+    "topic69831491": Object {
+      "Type": "AWS::SNS::Topic",
+    },
+    "topicPolicyBC9D8025": Object {
       "Properties": Object {
         "PolicyDocument": Object {
           "Statement": Array [
             Object {
-              "Action": Array [
-                "cloudwatch:ListMetrics",
-                "cloudwatch:GetMetricStatistics",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC",
-        "Roles": Array [
-          Object {
-            "Ref": "BillingMonitorFunctionServiceRoleC4E47CFC",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "modulesBB7D6B85": Object {
-      "Properties": Object {
-        "Content": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3BucketE43D9454",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
-        },
-      },
-      "Type": "AWS::Lambda::LayerVersion",
-    },
-  },
-}
-`;
-
-exports[`Waf snapshot 1`] = `
-Object {
-  "Parameters": Object {
-    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caArtifactHashC3057440": Object {
-      "Description": "Artifact hash for asset \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
-      "Type": "String",
-    },
-    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3Bucket7EC253FF": Object {
-      "Description": "S3 bucket for asset \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
-      "Type": "String",
-    },
-    "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54": Object {
-      "Description": "S3 key for asset version \\"6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87ca\\"",
-      "Type": "String",
-    },
-    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034ArtifactHashA216920F": Object {
-      "Description": "Artifact hash for asset \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
-      "Type": "String",
-    },
-    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3BucketE43D9454": Object {
-      "Description": "S3 bucket for asset \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
-      "Type": "String",
-    },
-    "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9": Object {
-      "Description": "S3 key for asset version \\"a5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034\\"",
-      "Type": "String",
-    },
-  },
-  "Resources": Object {
-    "BillingMonitorCronB145D2A8": Object {
-      "Properties": Object {
-        "Name": "BillingMonitorCron",
-        "ScheduleExpression": "cron(00 13 * * ? *)",
-        "State": "ENABLED",
-        "Targets": Array [
-          Object {
-            "Arn": Object {
-              "Fn::GetAtt": Array [
-                "BillingMonitorFunction3B4D76BE",
-                "Arn",
-              ],
-            },
-            "Id": "Target0",
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
-    "BillingMonitorFunction3B4D76BE": Object {
-      "DependsOn": Array [
-        "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC",
-        "BillingMonitorFunctionServiceRoleC4E47CFC",
-      ],
-      "Properties": Object {
-        "Code": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3Bucket7EC253FF",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParameters6745fbf639c20ec3ca35e0163ba5a18318de675e5cf7cdb3dec9a52c8ada87caS3VersionKey2D610D54",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
-        },
-        "Environment": Object {
-          "Variables": Object {
-            "POST_CHANNEL": "CQ7URCBD5",
-            "SLACK_API_TOKEN": "xoxp-19881142769-19881142785-810585468307-b4c12ee843aa511831ef58388a416113",
-          },
-        },
-        "FunctionName": "BillingMonitor",
-        "Handler": "index.handler",
-        "Layers": Array [
-          Object {
-            "Ref": "modulesBB7D6B85",
-          },
-        ],
-        "Role": Object {
-          "Fn::GetAtt": Array [
-            "BillingMonitorFunctionServiceRoleC4E47CFC",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs10.x",
-        "Timeout": 10,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "BillingMonitorFunctionAllowEventRuleBillingMonitorBillingMonitorCronDA99E21C1FE8A5F4": Object {
-      "Properties": Object {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": Object {
-          "Fn::GetAtt": Array [
-            "BillingMonitorFunction3B4D76BE",
-            "Arn",
-          ],
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": Object {
-          "Fn::GetAtt": Array [
-            "BillingMonitorCronB145D2A8",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "BillingMonitorFunctionServiceRoleC4E47CFC": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": "sts:AssumeRole",
+              "Action": "SNS:Publish",
               "Effect": "Allow",
               "Principal": Object {
-                "Service": "lambda.amazonaws.com",
+                "Service": "budgets.amazonaws.com",
               },
+              "Resource": Object {
+                "Ref": "topic69831491",
+              },
+              "Sid": "AWSBudgetsSNSPublishingPermissions",
             },
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
+        "Topics": Array [
           Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                "arn:",
-                Object {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
+            "Ref": "topic69831491",
           },
         ],
       },
-      "Type": "AWS::IAM::Role",
-    },
-    "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "cloudwatch:ListMetrics",
-                "cloudwatch:GetMetricStatistics",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "BillingMonitorFunctionServiceRoleDefaultPolicyA923CAAC",
-        "Roles": Array [
-          Object {
-            "Ref": "BillingMonitorFunctionServiceRoleC4E47CFC",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "modulesBB7D6B85": Object {
-      "Properties": Object {
-        "Content": Object {
-          "S3Bucket": Object {
-            "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3BucketE43D9454",
-          },
-          "S3Key": Object {
-            "Fn::Join": Array [
-              "",
-              Array [
-                Object {
-                  "Fn::Select": Array [
-                    0,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                Object {
-                  "Fn::Select": Array [
-                    1,
-                    Object {
-                      "Fn::Split": Array [
-                        "||",
-                        Object {
-                          "Ref": "AssetParametersa5675118b146c69e2ba24bb3f10cb5ee24fce708f4853ae4e4489bda26a98034S3VersionKey8A30D5A9",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            ],
-          },
-        },
-      },
-      "Type": "AWS::Lambda::LayerVersion",
+      "Type": "AWS::SNS::TopicPolicy",
     },
   },
 }

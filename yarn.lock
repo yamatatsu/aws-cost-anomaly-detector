@@ -98,6 +98,14 @@
     "@aws-cdk/core" "1.36.1"
     constructs "^3.0.2"
 
+"@aws-cdk/aws-budgets@^1.36.1":
+  version "1.36.1"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-budgets/-/aws-budgets-1.36.1.tgz#1313ca69232d00e90e1de666d1bb9cd9e1fa9739"
+  integrity sha512-WpIqERn9IqK7JxtpFbhaJXLI8RAh6bcHDo49teBWePY8GqAtPDYWGPjPAl1NFpiCoK+yvlhxrX+SYcS64gWV2Q==
+  dependencies:
+    "@aws-cdk/core" "1.36.1"
+    constructs "^3.0.2"
+
 "@aws-cdk/aws-certificatemanager@1.36.1":
   version "1.36.1"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-certificatemanager/-/aws-certificatemanager-1.36.1.tgz#ccfd2a5d3de2fff9cf00f0c34df557654002059d"
@@ -300,7 +308,7 @@
     "@aws-cdk/core" "1.36.1"
     constructs "^3.0.2"
 
-"@aws-cdk/aws-events-targets@^1.36.1":
+"@aws-cdk/aws-events-targets@1.36.1", "@aws-cdk/aws-events-targets@^1.36.1":
   version "1.36.1"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-events-targets/-/aws-events-targets-1.36.1.tgz#64f1e75beb3ba3a74195f8550ef4d9bcff155682"
   integrity sha512-iEKpjTWpUvSAgMaM3NCGV68lKS/lIP1YBGkGsgh8lTw6JJyF17ati1LcZ2k21YpfzfrKHWWRhFw65vBpHnRSmQ==
@@ -345,6 +353,19 @@
   integrity sha512-Ltn1HiOib3tU0GXHqiec1vQV4edMhsl4dCgvIyOf7ZGiUT6Rv1hBXHN6UYm9SyExUYVzlWqkVM0x3DvwS8Uwjg==
   dependencies:
     "@aws-cdk/aws-iam" "1.36.1"
+    "@aws-cdk/core" "1.36.1"
+    constructs "^3.0.2"
+
+"@aws-cdk/aws-lambda-destinations@^1.36.1":
+  version "1.36.1"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-lambda-destinations/-/aws-lambda-destinations-1.36.1.tgz#a8d50870fe42cddad6b54fc959f9c58cb0ef9623"
+  integrity sha512-moC26uMCopvrUI7iAs4P7SrewV2Zp/Yv75mq4eGPIAEsl2dwIMU7TF7edu03D80mcs3EF5tZdbc6sJmtpvKvFw==
+  dependencies:
+    "@aws-cdk/aws-events" "1.36.1"
+    "@aws-cdk/aws-events-targets" "1.36.1"
+    "@aws-cdk/aws-lambda" "1.36.1"
+    "@aws-cdk/aws-sns" "1.36.1"
+    "@aws-cdk/aws-sqs" "1.36.1"
     "@aws-cdk/core" "1.36.1"
     constructs "^3.0.2"
 

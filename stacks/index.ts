@@ -80,6 +80,10 @@ export class BillingMonitor extends cdk.Stack {
       }),
     );
 
+    /**
+     * AWS/Billing のメトリクスを使用する前に請求アラートの有効化を行う必要がある
+     * https://docs.aws.amazon.com/ja_jp/AmazonCloudWatch/latest/monitoring/monitor_estimated_charges_with_cloudwatch.html#turning_on_billing_metrics
+     */
     [
       { Currency: "USD", ServiceName: "AmazonEC2" },
       { Currency: "USD", ServiceName: "AWSMarketplace" },
@@ -109,19 +113,18 @@ export class BillingMonitor extends cdk.Stack {
           metric,
           period: cdk.Duration.days(1),
           statistic: "max",
-          alarmName: serviceName,
+          alarmName: `billing-of-${serviceName}`,
           comparisonOperator:
             cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
           threshold: 0,
           evaluationPeriods: 1,
           datapointsToAlarm: 1,
-          // alarmDescription?: string,
-          // evaluateLowSampleCountPercentile?: string,
-          // treatMissingData?: TreatMissingData,
-          // actionsEnabled?: boolean,
         });
       })
-      .forEach((alarm) => alarm.addAlarmAction(snsAction));
+      .forEach((alarm) => {
+        alarm.addAlarmAction(snsAction);
+        alarm.addInsufficientDataAction(snsAction);
+      });
 
     // ========================================
     // TODO: 以下、lambdaからchatbotを起動しようとして儚くも力尽きた残骸たち。

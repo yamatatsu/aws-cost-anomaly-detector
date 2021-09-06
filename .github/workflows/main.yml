@@ -7,24 +7,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [10.x]
-
     steps:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14
       - run: sudo apt-get update && sudo apt-get install -y libelf1 lsof
       - uses: actions/checkout@v1
       - run: node -v
       - run: yarn -v
       - run: yarn
-      - run: yarn build
-      - run: yarn cp-moddules
       - run: yarn test
-        env:
-          SLACK_API_TOKEN: test
-          POST_CHANNEL: test

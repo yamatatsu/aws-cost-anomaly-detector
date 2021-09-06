@@ -4,10 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "build": "ncc build lambda/index.ts --external aws-sdk",
-    "predeploy": "yarn build",
-    "deploy": "cdk deploy"
+    "test": "jest"
   },
   "devDependencies": {
     "@aws-cdk/assert": "1.121.0",

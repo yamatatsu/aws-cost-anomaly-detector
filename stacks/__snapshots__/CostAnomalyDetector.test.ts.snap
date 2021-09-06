@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot Test 1`] = `
+Object {
+  "Resources": Object {
+    "AnomalyMonitor": Object {
+      "Properties": Object {
+        "MonitorDimension": "SERVICE",
+        "MonitorName": "MyAnomalyMonitor",
+        "MonitorType": "DIMENSIONAL",
+      },
+      "Type": "AWS::CE::AnomalyMonitor",
+    },
+    "AnomalySubscription": Object {
+      "Properties": Object {
+        "Frequency": "IMMEDIATE",
+        "MonitorArnList": Array [
+          Object {
+            "Ref": "AnomalyMonitor",
+          },
+        ],
+        "Subscribers": Array [
+          Object {
+            "Address": Object {
+              "Ref": "topic69831491",
+            },
+            "Type": "SNS",
+          },
+        ],
+        "SubscriptionName": "MyAnomalySubscription",
+        "Threshold": 1,
+      },
+      "Type": "AWS::CE::AnomalySubscription",
+    },
+    "chatbot8E0F2E94": Object {
+      "Properties": Object {
+        "ConfigurationName": "CostAnomalyDetector",
+        "IamRoleArn": Object {
+          "Fn::GetAtt": Array [
+            "chatbotConfigurationRole13839A29",
+            "Arn",
+          ],
+        },
+        "SlackChannelId": "test-slackChannelId",
+        "SlackWorkspaceId": "test-slackWorkspaceId",
+        "SnsTopicArns": Array [
+          Object {
+            "Ref": "topic69831491",
+          },
+        ],
+      },
+      "Type": "AWS::Chatbot::SlackChannelConfiguration",
+    },
+    "chatbotConfigurationRole13839A29": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "chatbot.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "topic69831491": Object {
+      "Type": "AWS::SNS::Topic",
+    },
+  },
+}
+`;

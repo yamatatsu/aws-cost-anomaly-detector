@@ -1,1 +1,1 @@
-{ "app": "yarn ts-node stacks/index.ts" }
+{ "app": "yarn dotenv yarn ts-node stacks/index.ts" }
